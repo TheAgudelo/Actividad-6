@@ -69,7 +69,7 @@ public class InterfazEditar extends JFrame implements ActionListener {
             }
             try {
                 String nombreArchivo = titulo.getText().trim();
-                File archivo = new File("/C:\\Users\\Usuario\\Documents\\GitHub\\Actividad-6\\Archivos/" + nombreArchivo + ".txt");
+                File archivo = new File("Archivos/" + nombreArchivo + ".txt");
                 if (archivo.exists()) {
                     FileReader lector = new FileReader(archivo);
                     BufferedReader br = new BufferedReader(lector);
@@ -98,7 +98,7 @@ public class InterfazEditar extends JFrame implements ActionListener {
             }
             try {
                 String nombreArchivo = titulo.getText().trim();
-                File archivo = new File("/C:\\Users\\Usuario\\Documents\\GitHub\\Actividad-6\\Archivos/" + nombreArchivo + ".txt");
+                File archivo = new File("Archivos/" + nombreArchivo + ".txt");
                 if (archivo.exists()) {
                     String contenidoModificado = contenido.getText();
                     Files.write(Paths.get(archivo.getPath()), contenidoModificado.getBytes());

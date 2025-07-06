@@ -63,7 +63,7 @@ public class InterfazLeer extends JFrame implements ActionListener {
             }
             try {
                 String nombreArchivo = titulo.getText().trim();
-                File archivo = new File("/C:\\Users\\Usuario\\Documents\\GitHub\\Actividad-6\\Archivos/" + nombreArchivo + ".txt");
+                File archivo = new File("Archivos/" + nombreArchivo + ".txt");
                 if (archivo.exists()) {
                     FileReader lector = new FileReader(archivo);
                     BufferedReader br = new BufferedReader(lector);

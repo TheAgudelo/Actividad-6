@@ -58,7 +58,7 @@ public class InterfazCrear extends JFrame implements ActionListener {
             }
             try {
                 String nombreArchivo = titulo.getText().trim();
-                File archivo = new File("/C:\\Users\\Usuario\\Documents\\GitHub\\Actividad-6\\Archivos/"+nombreArchivo + ".txt");
+                File archivo = new File("Archivos/"+nombreArchivo + ".txt");
                 if (archivo.createNewFile()) {
                      FileWriter escritor = new FileWriter(archivo);
                       escritor.write(contenido.getText());

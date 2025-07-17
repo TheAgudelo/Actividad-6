@@ -10,7 +10,7 @@ public class InterfazInicial extends JFrame implements ActionListener {
 
     public InterfazInicial() {
         iniciar();
-        setTitle("Editor de Archivos");
+        setTitle("Contactos");
         setSize(400, 180);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -23,7 +23,7 @@ public class InterfazInicial extends JFrame implements ActionListener {
         // Inicialización de componentes
         bienvenida = new JTextField();
         bienvenida.setBounds(100, 20, 200, 30);
-        bienvenida.setText("Bienvenido al Editor de Archivos");
+        bienvenida.setText("Bienvenido al gestor de contactos");
         bienvenida.setEditable(false);
         crear = new JButton("Crear");
         crear.setBounds(20, 80, 70, 30);

@@ -2,7 +2,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.BufferedReader;
@@ -10,17 +9,45 @@ import java.io.BufferedReader;
 
 public class InterfazLeer extends JFrame implements ActionListener {
     private Container contenedor;
-    private JTextField titulo;
-    private JTextArea contenido;
+    private JTextField nombre, numero;
+    private JLabel nombreT, numeroT;
     private JButton abrir, cancelar;
+    private boolean encontrado = false;
 
     public InterfazLeer() {
         iniciar();
-        setTitle("Leer Archivo");
-        setSize(400, 340);
+        setTitle("Leer Contacto");
+        setSize(400, 240);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
+    }
+    private void leer(){
+        if (nombre.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío.");
+                return;
+            }
+            try (BufferedReader lector = new BufferedReader(new FileReader("Archivos/Contactos.txt"))) {
+              String linea;
+              while ((linea = lector.readLine()) != null) {
+                 if (linea.startsWith((nombre.getText().trim())+"&")) {
+                     String[] partes = linea.split("&");
+                     if (partes.length == 2) {
+                         numero.setText(partes[1]);
+                         encontrado = true;
+                         
+                        } else {
+                         JOptionPane.showMessageDialog(this, "Formato de contacto incorrecto.");
+                       } 
+                    
+                    }
+               }
+               if (!encontrado) {
+                   JOptionPane.showMessageDialog(this, "Contacto no encontrado.");
+               } 
+           } catch (IOException ex) {
+               System.out.println("Error al leer el archivo: " + ex.getMessage());
+           }
     }
 
     private void iniciar() {
@@ -28,27 +55,34 @@ public class InterfazLeer extends JFrame implements ActionListener {
         contenedor.setLayout(null);
 
         // Inicialización de componentes
-        titulo = new JTextField();
-        titulo.setBounds(50, 20, 300, 30);
-        titulo.setText("Título del Archivo");
+        nombreT = new JLabel("Nombre del contacto:");
+        nombreT.setBounds(40, 20, 135, 23);
+        numeroT = new JLabel("Número del contacto:");
+        numeroT.setBounds(40, 80, 135, 23);
 
-        contenido = new JTextArea(9, 30);
-        contenido.setBounds(50, 70, 300, 150);
-        contenido.setLineWrap(true);
-        contenido.setWrapStyleWord(true);
-        contenido.setEditable(false);
+        // Inicialización de componentes
+        nombre = new JTextField();
+        nombre.setBounds(50, 40, 300, 30);
+        nombre.setText("");
+        
+        numero = new JTextField();
+        numero.setEditable(false); 
+        numero.setText("");
+        numero.setBounds(50, 100, 300, 30);
 
-        abrir = new JButton("Abrir");
-        abrir.setBounds(80, 240, 80, 30);
+        abrir = new JButton("Leer");
+        abrir.setBounds(80, 160, 80, 30);
 
         cancelar = new JButton("Cancelar");
-        cancelar.setBounds(205, 240, 90, 30);
+        cancelar.setBounds(205, 160, 90, 30);
 
         // Agregar componentes al contenedor
-        contenedor.add(titulo);
-        contenedor.add(contenido);
+        contenedor.add(nombre);
+        contenedor.add(numero);
         contenedor.add(abrir);
         contenedor.add(cancelar);
+        contenedor.add(nombreT);
+        contenedor.add(numeroT);
 
         abrir.addActionListener(this);
         cancelar.addActionListener(this);
@@ -57,30 +91,7 @@ public class InterfazLeer extends JFrame implements ActionListener {
     // Función que maneja los eventos de los botones
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == abrir) {
-            if (titulo.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "El título no puede estar vacío.");
-                return;
-            }
-            try {
-                String nombreArchivo = titulo.getText().trim();
-                File archivo = new File("Archivos/" + nombreArchivo + ".txt");
-                if (archivo.exists()) {
-                    FileReader lector = new FileReader(archivo);
-                    BufferedReader br = new BufferedReader(lector);
-                    StringBuilder sb = new StringBuilder();
-                    String linea;
-                    while ((linea = br.readLine()) != null) {
-                        sb.append(linea).append("\n");
-                    }
-                    contenido.setText(sb.toString());
-                    br.close();
-                } else {
-                    JOptionPane.showMessageDialog(this, "El archivo no existe.");
-                    return;
-                }
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, "Error al abrir el archivo: " + ex.getMessage());
-            }
+           leer();
         } else if (e.getSource() == cancelar) {
             dispose(); 
         }

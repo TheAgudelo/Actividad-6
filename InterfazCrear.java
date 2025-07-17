@@ -2,19 +2,22 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 public class InterfazCrear extends JFrame implements ActionListener {
     private Container contenedor;
-    private JTextField titulo ;
-    private JTextArea contenido;
+    private JTextField nombre, numero;
+    private JLabel nombreT, numeroT;
     private JButton guardar, cancelar;
 
     public InterfazCrear() {
         iniciar();
-        setTitle("Crear Archivo");
-        setSize(400, 340);
+        setTitle("Crear Contacto");
+        setSize(400, 240);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -24,56 +27,88 @@ public class InterfazCrear extends JFrame implements ActionListener {
         contenedor = getContentPane();
         contenedor.setLayout(null);
 
+        nombreT = new JLabel("Nombre del contacto:");
+        nombreT.setBounds(40, 20, 135, 23);
+        numeroT = new JLabel("Número del contacto:");
+        numeroT.setBounds(40, 80, 135, 23);
+
         // Inicialización de componentes
-        titulo = new JTextField();
-        titulo.setBounds(50, 20, 300, 30);
-        titulo.setText("Título del Archivo");
+        nombre = new JTextField();
+        nombre.setBounds(50, 40, 300, 30);
+        nombre.setText("");
         
-        contenido = new JTextArea(9, 30);
-        contenido.setBounds(50, 70, 300, 150);
-        contenido.setLineWrap(true); 
-        contenido.setWrapStyleWord(true);
+        numero = new JTextField();
+        numero.setText("");
+        numero.setBounds(50, 100, 300, 30);
+        
         
         guardar = new JButton("Guardar");
-        guardar.setBounds(80, 240, 80, 30);
+        guardar.setBounds(80, 150, 80, 30);
         
         cancelar = new JButton("Cancelar");
-        cancelar.setBounds(205, 240, 90, 30);
+        cancelar.setBounds(205, 150, 90, 30);
 
-        // Agregar componentes al contenedor
-        contenedor.add(titulo);
-        contenedor.add(contenido);
+        
+        contenedor.add(nombre);
+        contenedor.add(numero);
         contenedor.add(guardar);
         contenedor.add(cancelar);
+        contenedor.add(nombreT);
+        contenedor.add(numeroT);
 
         guardar.addActionListener(this);
         cancelar.addActionListener(this);
     }
+    private void guardar(String nombre, String numero, File archivo) {
+        try {
+            
+            if (archivo.exists()) {
+                BufferedReader lector = new BufferedReader(new FileReader(archivo));
+                String linea;
+                while ((linea = lector.readLine()) != null) {
+                    if (linea.startsWith(nombre + "&")) {
+                        JOptionPane.showMessageDialog(this, "Ese contacto ya existe.");
+                        lector.close();
+                        return;
+                    }
+                }
+                lector.close();
+            }
+
+            
+            FileWriter escritor = new FileWriter(archivo, true); 
+            escritor.write(nombre + "&" + numero);
+            escritor.write("\n");
+            escritor.close();
+
+            JOptionPane.showMessageDialog(this, "Contacto guardado exitosamente.");
+            dispose(); 
+
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Error al guardar el contacto: " + ex.getMessage());
+        }
+
+        // Método para guardar el contacto
+        // Aquí se implementará la lógica de guardado
+
+    }
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == guardar) {
-            if (titulo.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "El título no puede estar vacío.");
+            if (nombre.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío.");
                 return;
             }
-            try {
-                String nombreArchivo = titulo.getText().trim();
-                File archivo = new File("Archivos/"+nombreArchivo + ".txt");
-                if (archivo.createNewFile()) {
-                     FileWriter escritor = new FileWriter(archivo);
-                      escritor.write(contenido.getText());
-                      escritor.close();
-                    System.out.println("Archivo creado: " + archivo.getName());
-                } else {
-                    JOptionPane.showMessageDialog(this, "El archivo ya existe.");
-                    return;
-                }
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, "Error al crear el archivo: " + ex.getMessage());
+            if (numero.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El número no puede estar vacío.");
+                return;
             }
-            dispose(); // Cerrar la ventana después de guardar
-        } else if (e.getSource() == cancelar) {
-            dispose(); // Cerrar la ventana sin guardar
+            File archivo = new File("Archivos/contactos.txt");
+            String nombreContacto = nombre.getText().trim();
+            String numeroContacto = numero.getText().trim();
+            guardar(nombreContacto, numeroContacto, archivo);
+    } else if (e.getSource() == cancelar) {
+            dispose(); 
         }
     }
     

@@ -1,6 +1,6 @@
-# Gestor de Contactos
+# Actividad 6 - punto 1: Gestor de contacto
 
-Este proyecto es una aplicación de escritorio desarrollada en Java con Swing que permite a los usuarios gestionar una lista de contactos. La aplicación ofrece funcionalidades para crear, leer, editar y eliminar contactos a través de una interfaz gráfica intuitiva.
+Este proyecto pertenece a los ejercicios de la materia programacion orientada a objetos y es una aplicación de escritorio desarrollada en Java con Swing que permite a los usuarios gestionar una lista de contactos. La aplicación ofrece funcionalidades para crear, leer, editar y eliminar contactos a través de una interfaz gráfica intuitiva.
 
 ## Características principales
 
@@ -65,10 +65,9 @@ javac Principal.java
 java Principal
 ```
 
-## Capturas de Pantalla
-
-> Puedes incluir aquí capturas de cada interfaz (crear, leer, editar, eliminar).
-
 ## Autor
 
 Desarrollado como parte de un ejercicio académico para la práctica de interfaces gráficas en Java y manejo de archivos.
+
+## UML
+![Diagrama de clases UML](/UML.png)
